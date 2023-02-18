@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Route, Routes } from "react-router-dom";
 import Header from "../Header/Header";
 import Main from "../Main/Main";
 import Footer from "../Footer/Footer";
@@ -9,6 +10,9 @@ import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import EditProfilePopup from "../EditProfilePopup/EditProfilePopup";
 import EditAvatarPopup from "../EditAvatarPopup/EditAvatarPopup";
 import AddPlacePopup from "../AddPlacePopup/AddPlacePopup";
+
+import Register from "../Register/Register";
+import Login from "../Login/Login";
 
 function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
@@ -121,51 +125,62 @@ function App() {
 
   return (
     <>
-      <Header />
+      <Routes>
+        <Route path="/sign-up" element={<Login />} />
+        <Route path="/sign-in" element={<Register />} />
+        <Route
+          path="react-mesto-auth/"
+          element={
+            <>
+              <Header />
 
-      <CurrentUserContext.Provider value={currentUser}>
-        <Main
-          onEditProfile={handleEditProfileClick}
-          onAddPlace={handleAddPlaceClick}
-          onEditAvatar={handleEditAvatarClick}
-          onDeletePopup={handleDeletePopupClick}
-          onCardClick={handleCardClick}
-          cards={cards}
-          onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
-        />
+              <CurrentUserContext.Provider value={currentUser}>
+                <Main
+                  onEditProfile={handleEditProfileClick}
+                  onAddPlace={handleAddPlaceClick}
+                  onEditAvatar={handleEditAvatarClick}
+                  onDeletePopup={handleDeletePopupClick}
+                  onCardClick={handleCardClick}
+                  cards={cards}
+                  onCardLike={handleCardLike}
+                  onCardDelete={handleCardDelete}
+                />
 
-        <Footer />
+                <Footer />
 
-        <EditProfilePopup
-          isOpen={isEditProfilePopupOpen}
-          onClose={closeAllPopups}
-          onUpdateUser={handleUpdateUser}
-        />
-        <EditAvatarPopup
-          isOpen={isEditAvatarPopupOpen}
-          onClose={closeAllPopups}
-          onUpdateAvatar={handleUpdateAvatar}
-        />
-        <AddPlacePopup
-          isOpen={isAddPlacePopupOpen}
-          onClose={closeAllPopups}
-          onAddPlace={handleAddPlaceSubmit}
-        />
+                <EditProfilePopup
+                  isOpen={isEditProfilePopupOpen}
+                  onClose={closeAllPopups}
+                  onUpdateUser={handleUpdateUser}
+                />
+                <EditAvatarPopup
+                  isOpen={isEditAvatarPopupOpen}
+                  onClose={closeAllPopups}
+                  onUpdateAvatar={handleUpdateAvatar}
+                />
+                <AddPlacePopup
+                  isOpen={isAddPlacePopupOpen}
+                  onClose={closeAllPopups}
+                  onAddPlace={handleAddPlaceSubmit}
+                />
 
-        <PopupWithForm
-          data={{
-            classSelector: "delete-popup",
-            title: "Вы уверены?",
-            user: "formDelete",
-            submit: "Да",
-          }}
-          isOpen={isDeletePopupOpen}
-          onClose={closeAllPopups}
-        />
+                <PopupWithForm
+                  data={{
+                    classSelector: "delete-popup",
+                    title: "Вы уверены?",
+                    user: "formDelete",
+                    submit: "Да",
+                  }}
+                  isOpen={isDeletePopupOpen}
+                  onClose={closeAllPopups}
+                />
 
-        <ImagePopup data={selectedCard} onClose={closeAllPopups} />
-      </CurrentUserContext.Provider>
+                <ImagePopup data={selectedCard} onClose={closeAllPopups} />
+              </CurrentUserContext.Provider>
+            </>
+          }
+        />
+      </Routes>
     </>
   );
 }
