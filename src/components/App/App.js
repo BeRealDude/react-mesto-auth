@@ -13,6 +13,10 @@ import AddPlacePopup from "../AddPlacePopup/AddPlacePopup";
 
 import Register from "../Register/Register";
 import Login from "../Login/Login";
+import InfoTooltip from "../InfoTooltip/InfoTooltip";
+import * as auth from "../../utils/auth/auth";
+
+import { useNavigate } from "react-router-dom";
 
 function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
@@ -23,6 +27,10 @@ function App() {
 
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
+
+
+  const navigate = useNavigate();
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     Promise.all([api.getInfo(), api.getCards()])
@@ -122,12 +130,28 @@ function App() {
         console.log(`${err}`);
       });
   }
+  
+
+  function handleRegister(info) {
+auth.register(info)
+.then(() => {
+        setMessage("");
+        navigate("/sign-up");
+      })
+      .catch((error) => {
+        setMessage(`Ошибка ${error}`);
+      });
+  }
 
   return (
     <>
       <Routes>
         <Route path="/sign-up" element={<Login />} />
-        <Route path="/sign-in" element={<Register />} />
+        <Route path="/sign-in" element={<Register 
+        onRegister={handleRegister}
+        onError={message}
+        />} />
+        <Route path="/info-tooltip" element={<InfoTooltip />} />
         <Route
           path="react-mesto-auth/"
           element={
