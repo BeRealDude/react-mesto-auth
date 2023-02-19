@@ -1,7 +1,31 @@
 import ModalWindows from "../ModalWindows/ModalWindows";
+import React, { useState } from "react";
 
-function Login() {
-   console.log('Login')
+function Login(props) {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    function handleChangeEmail(e) {
+        console.log("email");
+        setEmail(e.target.value);
+      }
+    
+      function handleChangePassword(e) {
+        console.log("pass");
+        setPassword(e.target.value);
+      }
+
+      function handleSubmit(e) {
+        e.preventDefault();
+        console.log("submit");
+        
+        props.onLogin({
+            email: email,
+            password: password
+        })
+        
+      }
+
     return(
         <ModalWindows
       data={{
@@ -10,41 +34,39 @@ function Login() {
         user: "userLogin",
         submit: "Войти",
       }}
-    //   isOpen={isOpen}
-    //   onClose={onClose}
-    //   onSubmit={handleSubmit}
-      //isOpen={isEditProfilePopupOpen}
-      //onClose={closeAllPopups}
+      onSubmit={handleSubmit}
     >
       <input
-        // value={name || ""}
-        // onChange={handleChangeName}
+        value={email || ""}
+        onChange={handleChangeEmail}
+        autoComplete="on"
         required
         minLength="2"
         maxLength="40"
         className="modal__text"
         type="email"
-        name="userName"
-        id="user-name"
+        name="email"
+        id="email"
         placeholder="Email"
       />
-      {/* <span className="form__error user-name-error" id="user-name-error" /> */}
+      <span className="form__error user-name-error" id="user-name-error">{props.message}</span>
+
       <input
-        // value={about || ""}
-        // onChange={handleChangeDescription}
+        value={password || ""}
+        onChange={handleChangePassword}
+        autoComplete="current-password"
         required
         minLength="2"
-        maxLength="200"
+        maxLength="40"
         className="modal__text"
         type="password"
-        name="userActivity"
-        id="user-activity"
+        name="password"
+        id="password"
         placeholder="Пароль"
       />
-      {/* <span
+      <span
         className="form__error user-activity-error"
-        id="user-activity-error"
-      /> */}
+        id="user-activity-error">{props.message}</span>
     </ModalWindows>
     )
 }

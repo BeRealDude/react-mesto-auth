@@ -143,10 +143,24 @@ auth.register(info)
       });
   }
 
+  function handleLogin(info) {
+    auth.authorize(info)
+.then(() => {
+        setMessage("");
+        navigate("/react-mesto-auth/");
+      })
+      .catch((error) => {
+        setMessage(`Ошибка ${error}`);
+      });
+  }
+
   return (
     <>
       <Routes>
-        <Route path="/sign-up" element={<Login />} />
+        <Route path="/sign-up" element={<Login 
+        onLogin={handleLogin}
+        onError={message}
+        />} />
         <Route path="/sign-in" element={<Register 
         onRegister={handleRegister}
         onError={message}

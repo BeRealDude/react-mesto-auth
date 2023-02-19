@@ -1,5 +1,5 @@
 .formModal{
-    display: flex;
+    display: grid;
     flex-direction: column;
     position: relative;
 }
