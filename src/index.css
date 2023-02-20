@@ -43,6 +43,10 @@
 @import url(./blocks/logo/logo.css);
 @import url(./blocks/header/header.css);
 
+
+@import url(./blocks/header/__nav/header__nav.css);
+@import url(./blocks/header/__email/header__email.css);
+@import url(./blocks/header/__signOut/header__signOut.css);
 @import url(./blocks/modal/__signin-link/modal__signin-link.css);
 @import url(./blocks/modal/__signin/modal__signin.css);
 @import url(./blocks/popup/__union/popup__union.css);

@@ -33,9 +33,9 @@ export function authorize(info) {
     }),
   })
     .then((res) => checkResponse(res))
-    .then((data) => {
-      if (data.token) {
-        const token = data.token;
+    .then((info) => {
+      if (info.token) {
+        const token = info.token;
         localStorage.setItem("jwt", token);
 
         return token;

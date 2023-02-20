@@ -2,7 +2,9 @@ import ModalWindows from "../ModalWindows/ModalWindows";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
+
 function Register(props) {
+  const { onInfoTooltip } = props
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -36,13 +38,14 @@ function Register(props) {
           submit: "Зарегистрироваться",
         }}
         onSubmit={handleSubmit}
+        onInfoTooltip={onInfoTooltip}
       >
         <input
           value={email || ""}
           onChange={handleChangeEmail}
           autoComplete="on"
           required
-          minLength="2"
+          minLength="6"
           maxLength="40"
           className="modal__text"
           type="email"
@@ -59,7 +62,7 @@ function Register(props) {
           onChange={handleChangePassword}
           autoComplete="current-password"
           required
-          minLength="2"
+          minLength="6"
           maxLength="40"
           className="modal__text"
           type="password"
