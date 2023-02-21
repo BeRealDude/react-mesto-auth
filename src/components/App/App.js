@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import Header from "../Header/Header";
 import Main from "../Main/Main";
 import Footer from "../Footer/Footer";
@@ -26,8 +26,6 @@ function App() {
     email: "",
   });
 
-  
-
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
@@ -40,46 +38,44 @@ function App() {
   const [cards, setCards] = useState([]);
 
   const navigate = useNavigate();
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
 
- 
   function tokenCheck() {
     const jwt = localStorage.getItem("jwt");
     if (jwt) {
-      auth.getContent(jwt).then((res) => {
-        setLoggedIn(true);
-        setInfoUser({
-          email: res.data.email,
+      auth
+        .getContent(jwt)
+        .then((res) => {
+          setLoggedIn(true);
+          setInfoUser({
+            email: res.data.email,
+          });
+          navigate("/", { replace: true });
+        })
+        .catch((err) => {
+          console.log("Ошибка", err);
         });
-        navigate("/", {replace: true});
-        console.log(infoUser)
-      });
     }
   }
 
-
   useEffect(() => {
-    //tokenCheck();
-    if(loggedIn) {
-    Promise.all([api.getInfo(), api.getCards()])
-      .then(([info, data]) => {
-        setCurrentUser(info);
-        setCards(data);
-      })
-      .catch((err) => {
-        console.log("Ошибка", err);
-      });
-  }}, [loggedIn]);
-
-  
+    if (loggedIn) {
+      Promise.all([api.getInfo(), api.getCards()])
+        .then(([info, data]) => {
+          setCurrentUser(info);
+          setCards(data);
+        })
+        .catch((err) => {
+          console.log("Ошибка", err);
+        });
+    }
+  }, [loggedIn]);
 
   useEffect(() => {
     tokenCheck();
   }, []);
-  
 
   function handleOpenInfoTooltip() {
-    console.log("tooltip");
     setIsInfoTooltip(true);
   }
 
@@ -113,10 +109,10 @@ function App() {
   }
 
   function handleSignOut() {
-    localStorage.removeItem('jwt');
-    navigate('/sign-in');
+    localStorage.removeItem("jwt");
+    navigate("/sign-up");
     setLoggedIn(false);
-    setInfoUser({email: "",});
+    setInfoUser({ email: "" });
   }
 
   function handleCardLike(data) {
@@ -183,18 +179,17 @@ function App() {
     auth
       .register(info)
       .then(() => {
-          setRegistration(true)
-          setMessage('Вы успешно зарегистрировались!');
-          handleOpenInfoTooltip();
-          navigate("/sign-up");
-        })
+        setRegistration(true);
+        setMessage("Вы успешно зарегистрировались!");
+        handleOpenInfoTooltip();
+        navigate("/sign-in");
+      })
       .catch(() => {
-        setMessage('Что-то пошло не так! Попробуйте ещё раз.');
+        setMessage("Что-то пошло не так! Попробуйте ещё раз.");
         setRegistration(false);
         handleOpenInfoTooltip();
-        console.log("тултип ошибка")
-       })
-      
+        console.log("тултип ошибка");
+      });
   }
 
   function handleLogin(info) {
@@ -206,37 +201,29 @@ function App() {
           setInfoUser({
             email: info.email,
           });
-          console.log(infoUser)
-          navigate("/", {replace: true});
-          // navigate("react-mesto-auth/");
+          navigate("/", { replace: true });
         }
       })
       .catch(() => {
-        setMessage('Что-то пошло не так! Попробуйте ещё раз.');
+        setMessage("Что-то пошло не так! Попробуйте ещё раз.");
         setRegistration(false);
         handleOpenInfoTooltip();
-        console.log("тултип ошибка")
-      })
-      // .finally(() => {
-      //   setRegistration(false);
-      //   handleOpenInfoTooltip();
-      //   console.log("тултип ошибка")
-      // })
+        console.log("тултип ошибка");
+      });
   }
-  
-  // function iaAuthorized() {
-  //   console.log(loggedIn)
-  //   return loggedIn;
-  // }
 
   return (
-    <div className="page">
+    <>
       <CurrentUserContext.Provider value={currentUser}>
-      <Header setLoggedIn={loggedIn} onSignOut={handleSignOut} infoUser={infoUser}/>
+        <Header
+          setLoggedIn={loggedIn}
+          onSignOut={handleSignOut}
+          infoUser={infoUser}
+        />
+
         <Routes>
-          {/* <Route path="react-mesto-auth/" element={} /> */}
           <Route
-            path="/sign-in"
+            path="/sign-up"
             element={
               <Register
                 onRegister={handleRegister}
@@ -246,29 +233,36 @@ function App() {
             }
           />
           <Route
-            path="/sign-up"
+            path="/sign-in"
             element={<Login onLogin={handleLogin} onError={message} />}
           />
           <Route
-          path="/"
-          element={
-            <ProtectedRoute
-              component={Main}
-              loggedIn={loggedIn}
-              onEditProfile={handleEditProfileClick}
-              onAddPlace={handleAddPlaceClick}
-              onEditAvatar={handleEditAvatarClick}
-              onDeletePopup={handleDeletePopupClick}
-              onCardClick={handleCardClick}
-              cards={cards}
-              onCardLike={handleCardLike}
-              onCardDelete={handleCardDelete}
-            />
-          }
-        />
+            path="/"
+            element={
+              <ProtectedRoute
+                component={Main}
+                loggedIn={loggedIn}
+                onEditProfile={handleEditProfileClick}
+                onAddPlace={handleAddPlaceClick}
+                onEditAvatar={handleEditAvatarClick}
+                onDeletePopup={handleDeletePopupClick}
+                onCardClick={handleCardClick}
+                cards={cards}
+                onCardLike={handleCardLike}
+                onCardDelete={handleCardDelete}
+              />
+            }
+          />
+
+          <Route
+            path="*"
+            element={
+              loggedIn ? <Navigate to="/" /> : <Navigate to="/sign-up" />
+            }
+          />
         </Routes>
 
-       
+        <Footer />
 
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
@@ -305,9 +299,8 @@ function App() {
           message={message}
           isRegistration={isRegistration}
         />
-         <Footer />
       </CurrentUserContext.Provider>
-    </div>
+    </>
   );
 }
 

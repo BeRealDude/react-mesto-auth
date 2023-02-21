@@ -6,18 +6,15 @@ function Login(props) {
   const [password, setPassword] = useState("");
 
   function handleChangeEmail(e) {
-    console.log("email");
     setEmail(e.target.value);
   }
 
   function handleChangePassword(e) {
-    console.log("pass");
     setPassword(e.target.value);
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log("submit");
 
     props.onLogin({
       email: email,
