@@ -50,6 +50,7 @@
 @import url(./blocks/modal/__signin-link/modal__signin-link.css);
 @import url(./blocks/modal/__signin/modal__signin.css);
 @import url(./blocks/popup/__union/popup__union.css);
+@import url(./blocks/popup/__heading/_tooltip/popup__heading_tooltip.css);
 @import url(./blocks/popup/__container/_tooltip/popup__container_tooltip.css);
 @import url(./blocks/modal/__text/modal__text.css);
 @import url(./blocks/formModal/__submit-btn/formModal__submit-btn.css);

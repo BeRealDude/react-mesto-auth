@@ -11,7 +11,7 @@ function InfoTooltip(props) {
           src={isRegistration ? unionOk : unionNo}
           alt="Подсказка"
         />
-        <h3 className="popup__heading">{isRegistration ? message : message}</h3>
+        <h3 className="popup__heading_tooltip">{isRegistration ? message : message}</h3>
         <button className="popup__close" type="button" onClick={onClose} />
       </div>
     </div>
