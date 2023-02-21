@@ -40,9 +40,7 @@ function App() {
   const [cards, setCards] = useState([]);
 
   const navigate = useNavigate();
-  const [message, setMessage] = useState({
-    status: false,
-  });
+  const [message, setMessage] = useState('');
 
  
   function tokenCheck() {
@@ -184,23 +182,19 @@ function App() {
   function handleRegister(info) {
     auth
       .register(info)
-      .then((res) => {
-        if (res) {
+      .then(() => {
           setRegistration(true)
-          setMessage({
-            status: true,
-          });
+          setMessage('Вы успешно зарегистрировались!');
           handleOpenInfoTooltip();
           navigate("/sign-up");
-        }
-        if (!res) {
-          handleOpenInfoTooltip();
-        }
-
-      })
-      .catch((error) => {
-        setMessage(`Ошибка ${error}`);
-      })
+        })
+      .catch(() => {
+        setMessage('Что-то пошло не так! Попробуйте ещё раз.');
+        setRegistration(false);
+        handleOpenInfoTooltip();
+        console.log("тултип ошибка")
+       })
+      
   }
 
   function handleLogin(info) {
@@ -209,7 +203,6 @@ function App() {
       .then((jwt) => {
         if (jwt) {
           setLoggedIn(true);
-          setMessage("");
           setInfoUser({
             email: info.email,
           });
@@ -218,9 +211,17 @@ function App() {
           // navigate("react-mesto-auth/");
         }
       })
-      .catch((error) => {
-        setMessage(`Ошибка ${error}`);
-      });
+      .catch(() => {
+        setMessage('Что-то пошло не так! Попробуйте ещё раз.');
+        setRegistration(false);
+        handleOpenInfoTooltip();
+        console.log("тултип ошибка")
+      })
+      // .finally(() => {
+      //   setRegistration(false);
+      //   handleOpenInfoTooltip();
+      //   console.log("тултип ошибка")
+      // })
   }
   
   // function iaAuthorized() {
@@ -229,10 +230,11 @@ function App() {
   // }
 
   return (
-    <>
+    <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
-        <Header setLoggedIn={loggedIn} onSignOut={handleSignOut} infoUser={infoUser}/>
+      <Header setLoggedIn={loggedIn} onSignOut={handleSignOut} infoUser={infoUser}/>
         <Routes>
+          {/* <Route path="react-mesto-auth/" element={} /> */}
           <Route
             path="/sign-in"
             element={
@@ -248,7 +250,7 @@ function App() {
             element={<Login onLogin={handleLogin} onError={message} />}
           />
           <Route
-          path="/react-mesto-auth"
+          path="/"
           element={
             <ProtectedRoute
               component={Main}
@@ -305,7 +307,7 @@ function App() {
         />
          <Footer />
       </CurrentUserContext.Provider>
-    </>
+    </div>
   );
 }
 
